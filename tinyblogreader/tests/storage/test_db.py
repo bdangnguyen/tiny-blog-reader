@@ -7,7 +7,9 @@ from tinyblogreader.storage.db import get_connection
 
 @pytest.fixture
 def conn():
-    return get_connection(":memory:")
+    conn = get_connection(":memory:")
+    yield conn
+    conn.close()
 
 
 def test_get_connection_returns_connection(conn):
@@ -23,6 +25,7 @@ def test_get_connection_sets_wal(tmp_path):
 
     conn = get_connection(db_path)
     row = conn.execute("PRAGMA journal_mode").fetchone()
+    conn.close()
 
     assert row[0] == "wal"
 
@@ -30,14 +33,14 @@ def test_get_connection_sets_wal(tmp_path):
 def test_get_connection_is_idempotent(tmp_path):
     db_path = tmp_path / "test.db"
 
-    get_connection(db_path)
-    get_connection(db_path)
+    get_connection(db_path).close()
+    get_connection(db_path).close()
 
 
 def test_get_connection_custom_path(tmp_path):
     db_path = tmp_path / "test.db"
 
-    get_connection(db_path)
+    get_connection(db_path).close()
 
     assert db_path.exists()
 
@@ -48,6 +51,6 @@ def test_get_connection_creates_directory(tmp_path, monkeypatch):
         "tinyblogreader.storage.db.user_data_dir", lambda _: missing_dir
     )
 
-    get_connection()
+    get_connection().close()
 
     assert missing_dir.exists()

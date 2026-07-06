@@ -14,9 +14,14 @@ dependencies = [
 dev = [
     "mypy>=2.1.0",
     "pytest>=9.0.3",
+    "pytest-cov>=7.1.0",
     "ruff>=0.15.13",
     "types-pyyaml>=6.0.12.20260518",
 ]
+
+[tool.pytest.ini_options]
+addopts = "--cov=tinyblogreader --cov-report=term-missing"
+filterwarnings = ["ignore::ResourceWarning:coverage"]
 
 [tool.ruff]
 line-length = 88
