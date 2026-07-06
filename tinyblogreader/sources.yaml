@@ -1,3 +1,7 @@
 - name: Netflix Tech Blog
   url: https://netflixtechblog.com
   feed_url: http://techblog.netflix.com/feeds/posts/default
+
+- name: Pinterest Engineering
+  url: https://medium.com/pinterest-engineering
+  feed_url: https://medium.com/feed/pinterest-engineering
