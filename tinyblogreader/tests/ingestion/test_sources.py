@@ -2,10 +2,12 @@ from tinyblogreader.ingestion.sources import BlogSource, load_sources
 
 
 def test_load_sources(tmp_path):
-    expected_source = BlogSource(
-        name="Netflix Tech Blog",
-        url="https://netflixtechblog.com",
-        feed_url="http://techblog.netflix.com/feeds/posts/default",
+    expected_source = BlogSource.model_validate(
+        {
+            "name": "Netflix Tech Blog",
+            "url": "https://netflixtechblog.com",
+            "feed_url": "http://techblog.netflix.com/feeds/posts/default",
+        }
     )
     yaml_content = """
     - name: Netflix Tech Blog
