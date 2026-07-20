@@ -13,10 +13,10 @@ class Article:
 
 class ArticleDAO:
     def __init__(self, conn: sqlite3.Connection):
-        self.conn = conn
+        self.conn: sqlite3.Connection = conn
 
     def insert(self, article: Article) -> None:
-        self.conn.execute(
+        _ = self.conn.execute(
             """
             INSERT INTO articles(id, source, title, url, content) VALUES
                 (?, ?, ?, ?, ?)

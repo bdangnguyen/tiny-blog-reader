@@ -13,6 +13,6 @@ def get_connection(db_path: Path | str | None = None) -> sqlite3.Connection:
         db_path = data_dir / "tiny_blog_reader.db"
 
     conn = sqlite3.connect(db_path)
-    conn.executescript(SCHEMA_PATH.read_text())
-    conn.execute("PRAGMA journal_mode=WAL")
+    _ = conn.executescript(SCHEMA_PATH.read_text())
+    _ = conn.execute("PRAGMA journal_mode=WAL")
     return conn

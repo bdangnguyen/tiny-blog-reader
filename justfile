@@ -5,7 +5,7 @@ lint:
     uv run ruff format .
 
 type-check:
-    uv run mypy .
+    uv run basedpyright .
 
 test:
     uv run pytest

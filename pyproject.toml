@@ -13,7 +13,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "mypy>=2.1.0",
+    "basedpyright>=1.39.9",
     "pytest>=9.0.3",
     "pytest-cov>=7.1.0",
     "ruff>=0.15.13",
@@ -30,3 +30,7 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "F", "I"]
+
+[tool.basedpyright]
+reportAny = false
+reportMissingTypeStubs = false

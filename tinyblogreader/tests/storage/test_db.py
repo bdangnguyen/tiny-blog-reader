@@ -1,4 +1,6 @@
 import sqlite3
+from collections.abc import Generator
+from pathlib import Path
 
 import pytest
 
@@ -6,21 +8,21 @@ from tinyblogreader.storage.db import get_connection
 
 
 @pytest.fixture
-def conn():
+def conn() -> Generator[sqlite3.Connection, None, None]:
     conn = get_connection(":memory:")
     yield conn
     conn.close()
 
 
-def test_get_connection_returns_connection(conn):
+def test_get_connection_returns_connection(conn: sqlite3.Connection):
     assert isinstance(conn, sqlite3.Connection)
 
 
-def test_get_connection_applies_schema(conn):
-    conn.execute("SELECT * FROM articles")
+def test_get_connection_applies_schema(conn: sqlite3.Connection):
+    _ = conn.execute("SELECT * FROM articles")
 
 
-def test_get_connection_sets_wal(tmp_path):
+def test_get_connection_sets_wal(tmp_path: Path):
     db_path = tmp_path / "test.db"
 
     conn = get_connection(db_path)
@@ -30,14 +32,14 @@ def test_get_connection_sets_wal(tmp_path):
     assert row[0] == "wal"
 
 
-def test_get_connection_is_idempotent(tmp_path):
+def test_get_connection_is_idempotent(tmp_path: Path):
     db_path = tmp_path / "test.db"
 
     get_connection(db_path).close()
     get_connection(db_path).close()
 
 
-def test_get_connection_custom_path(tmp_path):
+def test_get_connection_custom_path(tmp_path: Path):
     db_path = tmp_path / "test.db"
 
     get_connection(db_path).close()
@@ -45,11 +47,15 @@ def test_get_connection_custom_path(tmp_path):
     assert db_path.exists()
 
 
-def test_get_connection_creates_directory(tmp_path, monkeypatch):
+def test_get_connection_creates_directory(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
     missing_dir = tmp_path / "nested" / "test.db"
-    monkeypatch.setattr(
-        "tinyblogreader.storage.db.user_data_dir", lambda _: missing_dir
-    )
+
+    def _fake_user_data_dir(_appname: str) -> str:
+        return str(missing_dir)
+
+    monkeypatch.setattr("tinyblogreader.storage.db.user_data_dir", _fake_user_data_dir)
 
     get_connection().close()
 

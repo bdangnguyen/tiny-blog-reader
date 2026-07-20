@@ -1,7 +1,9 @@
+from pathlib import Path
+
 from tinyblogreader.ingestion.sources import BlogSource, load_sources
 
 
-def test_load_sources(tmp_path):
+def test_load_sources(tmp_path: Path):
     expected_source = BlogSource.model_validate(
         {
             "name": "Netflix Tech Blog",
@@ -16,7 +18,7 @@ def test_load_sources(tmp_path):
     """
 
     sources_file = tmp_path / "sources.yaml"
-    sources_file.write_text(yaml_content)
+    _ = sources_file.write_text(yaml_content)
 
     sources = load_sources(sources_file)
     assert len(sources) == 1

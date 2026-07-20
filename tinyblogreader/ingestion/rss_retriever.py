@@ -1,3 +1,4 @@
+# pyright: reportUnknownMemberType=false, reportUnknownVariableType=false, reportUnknownArgumentType=false, reportUnknownParameterType=false
 from dataclasses import dataclass
 
 import feedparser
@@ -10,7 +11,7 @@ class RawArticle:
     description: str
 
 
-def fetch_feed(feed_url: str):
+def fetch_feed(feed_url: str) -> list[RawArticle]:
     try:
         raw_data = feedparser.parse(feed_url)
 
